@@ -74,9 +74,9 @@ describe('ThreadCommentRepositoryPostres', () => {
             await threadCommentRepositoryPostgres.deleteThreadCommentById('comment-12345', 'thread-12345');
 
             // Assert
-            const threadComment = await ThreadsCommentsTableTestHelper.getThreadCommentById('comment-12345', 'thread-12345');
+            const { is_delete: isDelete } = await ThreadsCommentsTableTestHelper.getThreadCommentById('comment-12345', 'thread-12345');
 
-            expect(threadComment).toHaveLength(0);
+            expect(isDelete).toBe(true);
         });
     });
 

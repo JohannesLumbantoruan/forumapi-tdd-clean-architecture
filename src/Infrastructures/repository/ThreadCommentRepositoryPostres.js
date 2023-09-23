@@ -16,8 +16,8 @@ class ThreadCommentRepositoryPostres extends ThreadCommentRepository {
         const date = new Date().toISOString();
 
         const query = {
-            text: 'INSERT INTO threads_comments VALUES ($1, $2, $3, $4, $5) RETURNING id, content, owner',
-            values: [id, content, owner, date, threadId]
+            text: 'INSERT INTO threads_comments VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, content, owner',
+            values: [id, content, owner, date, threadId, false]
         };
 
         const result = await this._pool.query(query);
@@ -27,7 +27,9 @@ class ThreadCommentRepositoryPostres extends ThreadCommentRepository {
 
     async deleteThreadCommentById(commentId, threadId) {
         const query = {
-            text: 'DELETE FROM threads_comments WHERE id = $1 AND thread_id = $2 RETURNING id',
+            text: `UPDATE threads_comments
+            SET is_delete = TRUE
+            WHERE id = $1 AND thread_id = $2 RETURNING id`,
             values: [commentId, threadId]
         };
 
