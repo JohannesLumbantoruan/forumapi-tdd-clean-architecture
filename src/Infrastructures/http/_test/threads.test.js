@@ -17,6 +17,7 @@ describe('/thread endpoint', () => {
 
     let accessToken = '';
     let threadId = '';
+    let commentId = '';
 
     describe('when POST /threads', () => {
         it('should response status code 201 and added thread', async () => {
@@ -190,10 +191,120 @@ describe('/thread endpoint', () => {
 
             // Assert
             const responseJson = JSON.parse(response.payload);
+            commentId = responseJson.data.addedComment.id;
 
             expect(response.statusCode).toEqual(201);
             expect(responseJson.status).toEqual('success');
             expect(responseJson.data.addedComment).toBeDefined();
+        });
+    });
+
+    describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
+        it('should response status code 404 when thread not found', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // Action
+            const response = await server.inject({
+                method: 'DELETE',
+                url: `/threads/thread-12345/comments/${commentId}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(404);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('thread tidak ditemukan');
+        });
+
+        it('should response status code 404 when thread comment not found', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // Action
+            const response = await server.inject({
+                method: 'DELETE',
+                url: `/threads/${threadId}/comments/comment-12345`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(404);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('komentar thread tidak ditemukan');
+        });
+
+        it('should response status code 403 when user is not owner of the thread comment', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // create a new user
+            await server.inject({
+                method: 'POST',
+                url: '/users',
+                payload: {
+                    username: 'janedoe',
+                    password: 'janedoe',
+                    fullname: 'Jane Doe'
+                }
+            });
+
+            // get access token
+            const janeDoe = await server.inject({
+                method: 'POST',
+                url: '/authentications',
+                payload: {
+                    username: 'janedoe',
+                    password: 'janedoe'
+                }
+            });
+
+            const accessToken2 = JSON.parse(janeDoe.payload).data.accessToken;
+
+            // Action
+            const response = await server.inject({
+                method: 'DELETE',
+                url: `/threads/${threadId}/comments/${commentId}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken2}`
+                }
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(403);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('anda tidak berhak mengakses resource ini');
+        });
+
+        it('should response status code 200 when thread comment deleted successfully', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // Action
+            const response = await server.inject({
+                method: 'DELETE',
+                url: `/threads/${threadId}/comments/${commentId}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(200);
+            expect(responseJson.status).toEqual('success');
+            expect(responseJson.message).toEqual('komentar thread berhasil dihapus');
         });
     });
 });

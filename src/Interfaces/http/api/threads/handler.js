@@ -1,5 +1,6 @@
 const AddThreadUseCase = require("../../../../Applications/use_case/AddThreadUseCase");
 const AddThreadCommentUseCase = require("../../../../Applications/use_case/AddThreadCommentUseCase");
+const DeleteThreadCommentUseCase = require('../../../../Applications/use_case/DeleteThreadCommentUseCase');
 
 class ThreadsHandler {
     constructor(container) {
@@ -7,6 +8,7 @@ class ThreadsHandler {
 
         this.postThreadHandler = this.postThreadHandler.bind(this);
         this.postThreadCommentHandler = this.postThreadCommentHandler.bind(this);
+        this.deleteThreadCommentHandler = this.deleteThreadCommentHandler.bind(this);
     }
 
     async postThreadHandler(request, h) {
@@ -50,6 +52,24 @@ class ThreadsHandler {
         });
 
         response.code(201);
+
+        return response;
+    }
+
+    async deleteThreadCommentHandler(request, h) {
+        const payload = {
+            ...request.params,
+            userId: request.auth.credentials.id
+        };
+
+        const deleteThreadCommentUseCase = this._container.getInstance(DeleteThreadCommentUseCase.name);
+
+        await deleteThreadCommentUseCase.execute(payload);
+
+        const response = h.response({
+            status: 'success',
+            message: 'komentar thread berhasil dihapus'
+        });
 
         return response;
     }
