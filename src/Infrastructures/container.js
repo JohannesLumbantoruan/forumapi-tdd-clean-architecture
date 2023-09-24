@@ -17,6 +17,8 @@ const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const ThreadCommentRepository = require('../Domains/threads/ThreadCommentRepository');
 const ThreadCommentRepositoryPostres = require('./repository/ThreadCommentRepositoryPostres');
+const ThreadCommentReplyRepository = require('../Domains/threads/ThreadCommentReplyRepository');
+const ThreadCommentReplyRepositoryPostgres = require('./repository/ThreadCommentReplyRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
@@ -30,6 +32,7 @@ const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAu
 const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 const AddThreadCommentUseCase = require('../Applications/use_case/AddThreadCommentUseCase');
 const DeleteThreadCommentUseCase = require('../Applications/use_case/DeleteThreadCommentUseCase');
+const AddThreadCommentReplyUseCase = require('../Applications/use_case/AddThreadCommentReplyUseCase');
 
 // creating container
 const container = createContainer();
@@ -78,6 +81,20 @@ container.register([
   {
     key: ThreadCommentRepository.name,
     Class: ThreadCommentRepositoryPostres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool
+        },
+        {
+          concrete: nanoid
+        }
+      ]
+    }
+  },
+  {
+    key: ThreadCommentReplyRepository.name,
+    Class: ThreadCommentReplyRepositoryPostgres,
     parameter: {
       dependencies: [
         {
@@ -230,6 +247,27 @@ container.register([
         {
           name: 'threadRepository',
           internal: ThreadRepository.name
+        }
+      ]
+    }
+  },
+  {
+    key: AddThreadCommentReplyUseCase.name,
+    Class: AddThreadCommentReplyUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadCommentReplyRepository',
+          internal: ThreadCommentReplyRepository.name
+        },
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name
+        },
+        {
+          name: 'threadCommentRepository',
+          internal: ThreadCommentRepository.name
         }
       ]
     }

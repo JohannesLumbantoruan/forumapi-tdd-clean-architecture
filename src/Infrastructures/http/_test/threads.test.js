@@ -307,4 +307,46 @@ describe('/thread endpoint', () => {
             expect(responseJson.message).toEqual('komentar thread berhasil dihapus');
         });
     });
+
+    describe('when POST /threads/{threadId}/comments/{commentId}/replies', () => {
+        it('should response status code 201 and added reply', async () => {
+            // Arrange
+            const requestPayload = {
+                content: 'This is a comment reply'
+            };
+
+            const server = await createServer(container);
+
+            // create a thread comment
+            const threadComment = await server.inject({
+                method: 'POST',
+                url: `/threads/${threadId}/comments`,
+                payload: {
+                    content: 'This is a comment'
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            commentId = JSON.parse(threadComment.payload).data.addedComment.id;
+
+            // Action
+            const response = await server.inject({
+                method: 'POST',
+                url: `/threads/${threadId}/comments/${commentId}/replies`,
+                payload: requestPayload,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(201);
+            expect(responseJson.status).toEqual('success');
+            expect(responseJson.data.addedReply).toBeDefined();
+        });
+    });
 });
