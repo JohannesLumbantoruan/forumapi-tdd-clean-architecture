@@ -11,5 +11,11 @@ describe('ThreadCommentReplyRepository interface', () => {
 
         await expect(threadCommentReplyRepository.deleteThreadCommentReplyById())
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+
+        await expect(threadCommentReplyRepository.verifyThreadCommentReplyOwner())
+            .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+        
+        await expect(threadCommentReplyRepository.getThreadCommentReplyById())
+            .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     });
 });

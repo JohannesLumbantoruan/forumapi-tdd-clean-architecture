@@ -7,6 +7,7 @@ const pool = require('../../database/postgres/pool');
 const ThreadCommentReply = require('../../../Domains/threads/entities/ThreadCommentReply');
 const AddedThreadCommentReply = require('../../../Domains/threads/entities/AddedThreadCommentReply');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('ThreadCommentReplyRepositoryPostgres', () => {
     afterAll(async () => {
@@ -88,6 +89,49 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
             const [{ is_delete: isDelete }] = await ThreadsCommentsRepliesTableTestHelper.getThreadCommentReplyById('reply-12345', 'comment-12345');
 
             expect(isDelete).toBe(true);
+        });
+    });
+
+    describe('verifyThreadCommentReplyOwner method', () => {
+        it('should throw AuthorizationError when user not owner of thread comment reply', async () => {
+            // Arrange    
+            const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+            
+            // Action and Assert
+            await expect(threadCommentReplyRepositoryPostgres.verifyThreadCommentReplyOwner('reply-12345', 'user-23456'))
+                .rejects
+                .toThrowError(AuthorizationError);
+        });
+
+        it('should not throw AuthorizationError when user is owner of thread comment reply', async () => {
+            // Arrange    
+            const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+            // Action and Assert
+            await expect(threadCommentReplyRepositoryPostgres.verifyThreadCommentReplyOwner('reply-12345', 'user-12345'))
+                .resolves.not.toThrowError(AuthorizationError);
+        });
+    });
+
+    describe('getThreadCommentReplyById method', () => {
+        it('should throw NotFoundError when thread comment reply not found', async () => {
+            // Arrange    
+            const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+            // Action and Assert
+            await expect(threadCommentReplyRepositoryPostgres.getThreadCommentReplyById('reply-23456', 'comment-12345'))
+                .rejects.toThrowError(NotFoundError);
+        });
+
+        it('should return thread comment reply correctly when found', async () => {
+            // Arrange
+            const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+            // Action
+            const threadCommentReply = await threadCommentReplyRepositoryPostgres.getThreadCommentReplyById('reply-12345', 'comment-12345');
+
+            // Assert
+            expect(threadCommentReply).toBeDefined();
         });
     });
 });

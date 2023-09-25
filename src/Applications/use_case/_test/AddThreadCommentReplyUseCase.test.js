@@ -29,8 +29,6 @@ describe('AddThreadCommentReplyUseCase', () => {
             .mockImplementation(() => Promise.resolve());
         mockThreadCommentRepository.getThreadCommentById = jest.fn()
             .mockImplementation(() => Promise.resolve());
-        mockThreadCommentRepository.verifyThreadCommentOwner = jest.fn()
-            .mockImplementation(() => Promise.resolve());
         mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn()
             .mockImplementation(() => Promise.resolve(mockAddedThreadCommentReply));
 
@@ -48,8 +46,6 @@ describe('AddThreadCommentReplyUseCase', () => {
         expect(mockThreadRepository.getThreadById).toBeCalledWith(useCasePayload.threadId);
         expect(mockThreadCommentRepository.getThreadCommentById)
             .toBeCalledWith(useCasePayload.commentId, useCasePayload.threadId);
-        expect(mockThreadCommentRepository.verifyThreadCommentOwner)
-            .toBeCalledWith(useCasePayload.commentId, useCasePayload.userId);
         expect(mockThreadCommentReplyRepository.addThreadCommentReply)
             .toBeCalledWith(useCasePayload);
     });
