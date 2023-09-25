@@ -73,12 +73,6 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
         const commentResult = await this._pool.query(commentQuery);
 
-        if (commentResult.rowCount === 0) {
-            thread['comments'] = [];
-
-            return thread;
-        }
-
         const comments = commentResult.rows;
 
         for (const comment of comments) {

@@ -595,4 +595,42 @@ describe('/thread endpoint', () => {
             expect(responseJson.message).toEqual('balasan komentar thread berhasil dihapus');
         });
     });
+
+    describe('when GET /threads/{threadId}', () => {
+        it('should response status code 404 when thread not found', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // Action
+            const response = await server.inject({
+                method: 'GET',
+                url: `/threads/thread-12345`
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(404);
+            expect(responseJson.status).toEqual('fail');
+            expect(responseJson.message).toEqual('thread tidak ditemukan');
+        });
+
+        it('should response status code 200 when thread found', async () => {
+            // Arrange
+            const server = await createServer(container);
+
+            // Action
+            const response = await server.inject({
+                method: 'GET',
+                url: `/threads/${threadId}`
+            });
+
+            // Assert
+            const responseJson = JSON.parse(response.payload);
+
+            expect(response.statusCode).toEqual(200);
+            expect(responseJson.status).toEqual('success');
+            expect(responseJson.data.thread).toBeDefined();
+        });
+    });
 });

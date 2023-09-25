@@ -3,6 +3,7 @@ const AddThreadCommentUseCase = require("../../../../Applications/use_case/AddTh
 const DeleteThreadCommentUseCase = require('../../../../Applications/use_case/DeleteThreadCommentUseCase');
 const AddThreadCommentReplyUseCase = require("../../../../Applications/use_case/AddThreadCommentReplyUseCase");
 const DeleteThreadCommentReplyUseCase = require("../../../../Applications/use_case/DeleteThreadCommentReplyUseCase");
+const GetThreadDetailUseCase = require("../../../../Applications/use_case/GetThreadDetailUseCase");
 
 class ThreadsHandler {
     constructor(container) {
@@ -13,6 +14,7 @@ class ThreadsHandler {
         this.deleteThreadCommentHandler = this.deleteThreadCommentHandler.bind(this);
         this.postThreadCommentReplyHandler = this.postThreadCommentReplyHandler.bind(this);
         this.deleteThreadCommentReplyHandler = this.deleteThreadCommentReplyHandler.bind(this);
+        this.getThreadDetailByIdHandler = this.getThreadDetailByIdHandler.bind(this);
     }
 
     async postThreadHandler(request, h) {
@@ -114,6 +116,23 @@ class ThreadsHandler {
         const response = await h.response({
             status: 'success',
             message: 'balasan komentar thread berhasil dihapus'
+        });
+
+        return response;
+    }
+
+    async getThreadDetailByIdHandler(request, h) {
+        const payload = { ...request.params };
+
+        const getThreadDetailByIdUseCase = this._container.getInstance(GetThreadDetailUseCase.name);
+
+        const thread = await getThreadDetailByIdUseCase.execute(payload);
+
+        const response = h.response({
+            status: 'success',
+            data: {
+                thread
+            }
         });
 
         return response;
