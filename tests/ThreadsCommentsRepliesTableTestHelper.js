@@ -25,6 +25,16 @@ const ThreadsCommentsRepliesTableTestHelper = {
         return result.rows;
     },
 
+    async deleteThreadCommentReplyById(replyId, commentId) {
+        const query = {
+            text: `UPDATE threads_comments_replies SET is_delete = TRUE
+            WHERE id = $1 AND thread_comment_id = $2`,
+            values: [replyId, commentId]
+        };
+
+        await pool.query(query);
+    },
+
     async cleanTable() {
         await pool.query('DELETE FROM threads_comments_replies');
     }
