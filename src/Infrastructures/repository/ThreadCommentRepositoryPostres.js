@@ -67,6 +67,17 @@ class ThreadCommentRepositoryPostres extends ThreadCommentRepository {
 
         return result.rows[0];
     }
+
+    async getThreadCommentsByThreadId(threadId) {
+        const query = {
+            text: 'SELECT * FROM threads_comments WHERE thread_id = $1 ORDER BY date',
+            values: [threadId]
+        };
+
+        const result = await this._pool.query(query);
+
+        return result.rows;
+    }
 }
 
 module.exports = ThreadCommentRepositoryPostres;

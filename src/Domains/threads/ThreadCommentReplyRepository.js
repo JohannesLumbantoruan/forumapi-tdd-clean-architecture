@@ -14,6 +14,10 @@ class ThreadCommentReplyRepository {
     async getThreadCommentReplyById(replyId, commentId) {
         throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     }
+
+    async getThreadCommentRepliesByCommentId(commentId) {
+        throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    }
 }
 
 module.exports = ThreadCommentReplyRepository;

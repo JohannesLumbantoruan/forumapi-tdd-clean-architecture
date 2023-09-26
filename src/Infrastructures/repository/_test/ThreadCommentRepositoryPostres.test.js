@@ -140,4 +140,23 @@ describe('ThreadCommentRepositoryPostres', () => {
             expect(thread_id).toEqual('thread-12345');
         });
     });
+
+    describe('getThreadCommentsByThreadId method', () => {
+        it('should return thread comments correctly', async () => {
+            // Arrange
+            const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostres(pool, {});
+
+            // create 3 thread comments
+            await ThreadsCommentsTableTestHelper.addThreadComment({ id: 'comment-12345', threadId: 'thread-12345' });
+            await ThreadsCommentsTableTestHelper.addThreadComment({ id: 'comment-23456', threadId: 'thread-12345' });
+            await ThreadsCommentsTableTestHelper.addThreadComment({ id: 'comment-34567', threadId: 'thread-12345' });
+
+            // Action
+            const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-12345');
+
+            // Assert
+            expect(Array.isArray(comments)).toBe(true);
+            expect(comments).toHaveLength(3);
+        });
+    });
 });

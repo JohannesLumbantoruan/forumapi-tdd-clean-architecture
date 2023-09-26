@@ -15,7 +15,7 @@ describe('AddThreadCommentReplyUseCase', () => {
             userId: 'user-12345'
         });
 
-        const mockAddedThreadCommentReply = new AddedThreadCommentReply({
+        const expectedAddedThreadCommentReply = new AddedThreadCommentReply({
             id: 'reply-12345',
             content: 'This is a comment reply',
             owner: 'user-12345'
@@ -26,11 +26,15 @@ describe('AddThreadCommentReplyUseCase', () => {
         const mockThreadCommentRepository = new ThreadCommentRepository();
 
         mockThreadRepository.getThreadById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
+            .mockImplementation(() => Promise.resolve({}));
         mockThreadCommentRepository.getThreadCommentById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
+            .mockImplementation(() => Promise.resolve({}));
         mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn()
-            .mockImplementation(() => Promise.resolve(mockAddedThreadCommentReply));
+            .mockImplementation(() => Promise.resolve(new AddedThreadCommentReply({
+                id: 'reply-12345',
+                content: 'This is a comment reply',
+                owner: 'user-12345'
+            })));
 
         const addThreadCommentReplyUseCase = new AddThreadCommentReplyUseCase({
             threadCommentReplyRepository: mockThreadCommentReplyRepository,
@@ -42,7 +46,7 @@ describe('AddThreadCommentReplyUseCase', () => {
         const addedThreadCommentReply = await addThreadCommentReplyUseCase.execute(useCasePayload);
 
         // Assert
-        expect(addedThreadCommentReply).toStrictEqual(mockAddedThreadCommentReply);
+        expect(addedThreadCommentReply).toStrictEqual(expectedAddedThreadCommentReply);
         expect(mockThreadRepository.getThreadById).toBeCalledWith(useCasePayload.threadId);
         expect(mockThreadCommentRepository.getThreadCommentById)
             .toBeCalledWith(useCasePayload.commentId, useCasePayload.threadId);

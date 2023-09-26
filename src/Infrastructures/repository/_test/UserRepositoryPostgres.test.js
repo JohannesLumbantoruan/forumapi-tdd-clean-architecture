@@ -1,5 +1,6 @@
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
 const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser');
 const pool = require('../../database/postgres/pool');
@@ -120,6 +121,31 @@ describe('UserRepositoryPostgres', () => {
 
       // Assert
       expect(userId).toEqual('user-321');
+    });
+  });
+
+  describe('getUsernameById', () => {
+    it('should throw NotFoundError when user not found', async () => {
+      // Arrange
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      // Action and Assert
+      await expect(userRepositoryPostgres.getUsernameById('user-12345'))
+        .rejects.toThrowError(NotFoundError);
+    });
+
+    it('should return user username correctly', async () => {
+      // Arrange
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      // creat e user
+      await UsersTableTestHelper.addUser({ id: 'user-12345', username: 'johndoe' });
+
+      // Action
+      const username = await userRepositoryPostgres.getUsernameById('user-12345');
+
+      // Assert
+      expect(username).toStrictEqual('johndoe');
     });
   });
 });

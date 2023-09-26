@@ -17,5 +17,8 @@ describe('ThreadCommentReplyRepository interface', () => {
         
         await expect(threadCommentReplyRepository.getThreadCommentReplyById())
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+
+        await expect(threadCommentReplyRepository.getThreadCommentRepliesByCommentId())
+            .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     });
 });

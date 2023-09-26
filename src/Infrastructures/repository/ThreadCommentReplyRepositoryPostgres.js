@@ -66,6 +66,17 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
 
         return result.rows[0];
     }
+
+    async getThreadCommentRepliesByCommentId(commentId) {
+        const query = {
+            text: 'SELECT * FROM threads_comments_replies WHERE thread_comment_id = $1 ORDER BY date',
+            values: [commentId]
+        };
+
+        const result = await this._pool.query(query);
+
+        return result.rows;
+    }
 }
 
 module.exports = ThreadCommentReplyRepositoryPostgres;

@@ -105,44 +105,4 @@ describe('ThreadRepositoryPostgres', () => {
             expect(date).toBeDefined();
         });
     });
-
-    describe('getThreadDetailById method', () => {
-        it('should throw NotFoundError when thread not found', async () => {
-            // Arrange
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-            // Action and Assert
-            await expect(threadRepositoryPostgres.getThreadDetailById('thread-12345'))
-                .rejects.toThrowError(NotFoundError);
-        });
-
-        it('should return thread detail properties and values correctly', async () => {
-            // Arrange
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-            // create a thread
-            await ThreadsTableTestHelper.addThread({ id: 'thread-12345' });
-
-            // create a thread comment
-            await ThreadsCommentsTableTestHelper.addThreadComment({ id: 'comment-12345' });
-            await ThreadsCommentsTableTestHelper.addThreadComment({ id: 'comment-23456' });
-
-            // delete 1 of the thread comment
-            await ThreadsCommentsTableTestHelper.deleteThreadCommentById('comment-23456', 'thread-12345');
-
-            // create a thread comment reply
-            await ThreadsCommentsRepliesTableTestHelper.addThreadCommentReply({ id: 'reply-12345' });
-            await ThreadsCommentsRepliesTableTestHelper.addThreadCommentReply({ id: 'reply-23456' });
-
-            // delete 1 of the thread comment reply
-            await ThreadsCommentsRepliesTableTestHelper.deleteThreadCommentReplyById('reply-23456', 'comment-12345');
-
-            // Action
-            const threadDetail = await threadRepositoryPostgres.getThreadDetailById('thread-12345');
-
-            // Assert
-            expect(threadDetail).toBeDefined();
-            expect(threadDetail.comments).toBeDefined();
-        });
-    });
 });

@@ -28,7 +28,7 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
                 commentId: 'comment-12345'
             });
     
-            const mockAddedThreadCommentReply = new AddedThreadCommentReply({
+            const expectedAddedThreadCommentReply = new AddedThreadCommentReply({
                 id: 'reply-12345',
                 content: 'This is a comment reply',
                 owner: 'user-12345'
@@ -63,7 +63,7 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
             const addedThreadCommentReply = await threadCommentReplyRepositoryPostgres.addThreadCommentReply(payload);
     
             // Assert
-            expect(addedThreadCommentReply).toStrictEqual(mockAddedThreadCommentReply);
+            expect(addedThreadCommentReply).toStrictEqual(expectedAddedThreadCommentReply);
         });
     });
 
@@ -132,6 +132,20 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
 
             // Assert
             expect(threadCommentReply).toBeDefined();
+        });
+    });
+
+    describe('getThreadCommentRepliesByCommentId method', () => {
+        it('should return thread comment replies correctly', async () => {
+            // Arrange
+            const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+            // Action
+            const replies = await threadCommentReplyRepositoryPostgres.getThreadCommentRepliesByCommentId('comment-12345');
+
+            // Assert
+            expect(Array.isArray(replies)).toBe(true);
+            expect(replies).toHaveLength(1);
         });
     });
 });
