@@ -51,13 +51,31 @@ describe('DeleteThreadCommentReplyUseCase', () => {
         const mockThreadCommentReplyRepository = new ThreadCommentReplyRepository();
 
         mockThreadRepository.getThreadById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
+            .mockImplementation(() => Promise.resolve({
+                id: 'thread-12345',
+                title: 'My First Thread',
+                body: 'This is my first thread.',
+                owner: 'user-12345',
+                date: new Date().toISOString()
+            }));
         mockThreadCommentRepository.getThreadCommentById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
+            .mockImplementation(() => Promise.resolve({
+                id: 'comment-12345',
+                content: 'This is a thread comment',
+                owner: 'user-12345',
+                thread_id: 'thread-12345',
+                is_delete: false,
+                date: new Date().toISOString()
+            }));
         mockThreadCommentReplyRepository.getThreadCommentReplyById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
-        mockThreadCommentReplyRepository.getThreadCommentReplyById = jest.fn()
-            .mockImplementation(() => Promise.resolve());
+            .mockImplementation(() => Promise.resolve({
+                id: 'comment-12345',
+                conten: 'This is a thread comment reply',
+                owner: 'user-12345',
+                thread_comment_id: 'comment-12345',
+                date: new Date().toISOString(),
+                is_delete: false
+            }));
         mockThreadCommentReplyRepository.verifyThreadCommentReplyOwner = jest.fn()
             .mockImplementation(() => Promise.resolve());
         mockThreadCommentReplyRepository.deleteThreadCommentReplyById = jest.fn()

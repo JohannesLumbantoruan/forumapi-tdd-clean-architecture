@@ -6,19 +6,19 @@ describe('ThreadCommentReplyRepository interface', () => {
         const threadCommentReplyRepository = new ThreadCommentReplyRepository();
 
         // Action and Assert
-        await expect(threadCommentReplyRepository.addThreadCommentReply())
+        await expect(threadCommentReplyRepository.addThreadCommentReply(''))
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
 
-        await expect(threadCommentReplyRepository.deleteThreadCommentReplyById())
+        await expect(threadCommentReplyRepository.deleteThreadCommentReplyById('', ''))
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
 
-        await expect(threadCommentReplyRepository.verifyThreadCommentReplyOwner())
+        await expect(threadCommentReplyRepository.verifyThreadCommentReplyOwner('', ''))
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
         
-        await expect(threadCommentReplyRepository.getThreadCommentReplyById())
+        await expect(threadCommentReplyRepository.getThreadCommentReplyById('', ''))
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
 
-        await expect(threadCommentReplyRepository.getThreadCommentRepliesByCommentId())
+        await expect(threadCommentReplyRepository.getThreadCommentRepliesByCommentId(''))
             .rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     });
 });
