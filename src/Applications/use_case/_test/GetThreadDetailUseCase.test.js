@@ -52,6 +52,32 @@ describe('GetThreadDetailUseCase', () => {
                             username: 'johndoe',
                             content: 'This is a comment reply',
                             date: mockDate
+                        },
+                        {
+                            id: 'reply-23456',
+                            username: 'johndoe',
+                            content: '**balasan telah dihapus**',
+                            date: mockDate
+                        }
+                    ]
+                },
+                {
+                    id: 'comment-23456',
+                    username: 'johndoe',
+                    content: '**komentar telah dihapus**',
+                    date: mockDate,
+                    replies: [
+                        {
+                            id: 'reply-12345',
+                            username: 'johndoe',
+                            content: 'This is a comment reply',
+                            date: mockDate
+                        },
+                        {
+                            id: 'reply-23456',
+                            username: 'johndoe',
+                            content: '**balasan telah dihapus**',
+                            date: mockDate
                         }
                     ]
                 }
@@ -76,6 +102,14 @@ describe('GetThreadDetailUseCase', () => {
                     date: mockDate,
                     thread_id: 'thread-12345',
                     is_delete: false
+                },
+                {
+                    id: 'comment-23456',
+                    content: 'This is the second comment',
+                    owner: 'user-12345',
+                    date: mockDate,
+                    thread_id: 'thread-12345',
+                    is_delete: true
                 }
             ]));
 
@@ -88,6 +122,14 @@ describe('GetThreadDetailUseCase', () => {
                     thread_comment_id: 'comment-12345',
                     date: mockDate,
                     is_delete: false
+                },
+                {
+                    id: 'reply-23456',
+                    content: 'This is the second comment reply',
+                    owner: 'user-12345',
+                    thread_comment_id: 'comment-12345',
+                    date: mockDate,
+                    is_delete: true
                 }
             ]));
 

@@ -30,7 +30,13 @@ describe('AddThreadCommentUseCase', () => {
             })));
         
         mockThreadRepository.getThreadById = jest.fn()
-            .mockImplementation(() => Promise.resolve({}));
+            .mockImplementation(() => Promise.resolve({
+                id: 'thread-12345',
+                title: 'My First Thread',
+                body: 'This is my first thread.',
+                owner: 'user-12345',
+                date: new Date().toISOString()
+            }));
 
         const addThreadCommentUseCase = new AddThreadCommentUseCase({
             threadCommentRepository: mockThreadCommentRepository,

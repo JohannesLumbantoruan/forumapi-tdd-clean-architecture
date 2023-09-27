@@ -26,9 +26,21 @@ describe('AddThreadCommentReplyUseCase', () => {
         const mockThreadCommentRepository = new ThreadCommentRepository();
 
         mockThreadRepository.getThreadById = jest.fn()
-            .mockImplementation(() => Promise.resolve({}));
+            .mockImplementation(() => Promise.resolve({
+                id: 'thread-12345',
+                title: 'My First Thread',
+                body: 'This is my first thread.',
+                owner: 'user-12345',
+                date: new Date().toISOString()
+            }));
         mockThreadCommentRepository.getThreadCommentById = jest.fn()
-            .mockImplementation(() => Promise.resolve({}));
+            .mockImplementation(() => Promise.resolve({
+                id: 'comment-12345',
+                content: 'This is a comment',
+                owner: 'user-12345',
+                date: new Date().toISOString(),
+                is_delete: false
+            }));
         mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn()
             .mockImplementation(() => Promise.resolve(new AddedThreadCommentReply({
                 id: 'reply-12345',
