@@ -28,7 +28,7 @@ describe('AddThreadCommentUseCase', () => {
                 content: 'This is a comment',
                 owner: 'user-12345'
             })));
-        
+
         mockThreadRepository.getThreadById = jest.fn()
             .mockImplementation(() => Promise.resolve({
                 id: 'thread-12345',
