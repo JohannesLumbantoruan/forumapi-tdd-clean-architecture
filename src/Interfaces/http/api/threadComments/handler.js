@@ -1,4 +1,4 @@
-const AddThreadCommentUseCase = require("../../../../Applications/use_case/AddThreadCommentUseCase");
+const AddThreadCommentUseCase = require('../../../../Applications/use_case/AddThreadCommentUseCase');
 const DeleteThreadCommentUseCase = require('../../../../Applications/use_case/DeleteThreadCommentUseCase');
 
 class ThreadCommentsHandler {

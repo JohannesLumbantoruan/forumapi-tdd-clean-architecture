@@ -1,7 +1,7 @@
-const UsersTableTestHelper = require("../../../../tests/UsersTableTestHelper");
-const pool = require("../../database/postgres/pool");
-const createServer = require("../createServer");
-const container = require("../../container");
+const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const pool = require('../../database/postgres/pool');
+const createServer = require('../createServer');
+const container = require('../../container');
 
 describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
     afterAll(async () => {
@@ -81,7 +81,7 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
 
             // Assert
             const responseJson = JSON.parse(response.payload);
-            
+
             expect(response.statusCode).toEqual(404);
             expect(responseJson.status).toEqual('fail');
             expect(responseJson.message).toEqual('thread tidak ditemukan');
@@ -102,7 +102,7 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
 
             // Assert
             const responseJson = JSON.parse(response.payload);
-            
+
             expect(response.statusCode).toEqual(404);
             expect(responseJson.status).toEqual('fail');
             expect(responseJson.message).toEqual('komentar thread tidak ditemukan');
@@ -123,7 +123,7 @@ describe('/threads/{threadId}/comments/{commentId}/likes endpoint', () => {
 
             // Assert
             const responseJson = JSON.parse(response.payload);
-            
+
             expect(response.statusCode).toEqual(200);
             expect(responseJson.status).toEqual('success');
         });

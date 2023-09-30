@@ -1,7 +1,5 @@
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
-const ThreadsCommentsTableTestHelper = require('../../../../tests/ThreadsCommentsTableTestHelper');
-const ThreadsCommentsRepliesTableTestHelper = require('../../../../tests/ThreadsCommentsRepliesTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const Thread = require('../../../Domains/threads/entities/Thread');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
@@ -17,7 +15,7 @@ describe('ThreadRepositoryPostgres', () => {
         await UsersTableTestHelper.cleanTable();
 
         await pool.end();
-    })
+    });
 
     describe('addThread method', () => {
         it('should persist add thread and return added thread correctly', async () => {
