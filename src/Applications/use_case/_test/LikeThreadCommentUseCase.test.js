@@ -23,7 +23,7 @@ describe('LikeThreadCommentUseCase', () => {
         const useCasePayload = {
             threadId: 'thread-12345',
             commentId: 'comment-12345',
-            userId: 12345
+            userId: true
         };
 
         const likeThreadCommentUseCase = new LikeThreadCommentUseCase({});
