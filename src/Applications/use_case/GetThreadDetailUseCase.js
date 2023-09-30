@@ -3,11 +3,13 @@ class GetThreadDetailUseCase {
         threadRepository,
         threadCommentRepository,
         threadCommentReplyRepository,
+        threadCommentLikeRepository,
         userRepository
     }) {
         this._threadRepository = threadRepository;
         this._threadCommentRepository = threadCommentRepository;
         this._threadCommentReplyRepository = threadCommentReplyRepository;
+        this._threadCommentLikeRepository = threadCommentLikeRepository;
         this._userRepository = userRepository;
     }
 
@@ -18,7 +20,6 @@ class GetThreadDetailUseCase {
         const username = await this._userRepository.getUsernameById(thread.owner);
         thread['username'] = username;
         delete thread['owner'];
-        
 
         const comments = await this._threadCommentRepository.getThreadCommentsByThreadId(thread.id);
 
@@ -26,8 +27,12 @@ class GetThreadDetailUseCase {
             const username = await this._userRepository.getUsernameById(comment.owner);
 
             if (comment['is_delete']) {
-                comment.content = '**komentar telah dihapus**'
+                comment.content = '**komentar telah dihapus**';
             }
+
+            const likeCount = await this._threadCommentLikeRepository.getCommentLikeCountByCommentId(comment.id);
+
+            comment['likeCount'] = likeCount;
 
             comment['username'] = username;
             delete comment['owner'];
@@ -40,7 +45,7 @@ class GetThreadDetailUseCase {
                 const username = await this._userRepository.getUsernameById(reply.owner);
 
                 if (reply['is_delete']) {
-                    reply.content = '**balasan telah dihapus**'
+                    reply.content = '**balasan telah dihapus**';
                 }
 
                 reply['username'] = username;

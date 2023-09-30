@@ -24,7 +24,9 @@ DomainErrorTranslator._directories = {
   'THREAD_COMMENT_REPLY.NOT_CONTAINS_NEEDED_PROPERTY': new InvariantError('harus mengirimkan isi balasan komentar thread'),
   'THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('balasan komentar thread harus berupa string'),
   'GET_THREAD_DETAIL_USE_CASE.NOT_CONTAINS_NEEDED_PROPERTY': new InvariantError('harus mengirimkan thread id'),
-  'GET_THREAD_DETAIL_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('thread id harus berupa string')
+  'GET_THREAD_DETAIL_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('thread id harus berupa string'),
+  'LIKE_THREAD_COMMENT_USE_CASE.NOT_CONTAINS_NEEDED_PROPERTY': new InvariantError('harus mengirimkan threadId, commentId, dan userId'),
+  'LIKE_THREAD_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('threadId, commentId, dan userId harus berupa string')
 };
 
 module.exports = DomainErrorTranslator;
